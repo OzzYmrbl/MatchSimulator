@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>OZY SIMULATOR</title>
+  <style>
+    #scoreContainer {
+      text-align: center;
+      margin-top: 100px;
+      font-size: 24px;
+      color: white;
+    }
+
+    #teamsContainer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    .teamLogo {
+      height: 100%;
+      max-height: 50px;
+    }
+
+    #playersContainer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    #playersContainer p {
+      color: red;
+    }
+
+    #startButton {
+      display: block;
+      margin: 20px auto;
+    }
+
+    h3 {
+      color: blue;
+    }
+  </style>
+  <script>
+    function simulateMatch() {
+      var teamNames = [
+        {
+          name: "Galatasaray", players: ["Kazımcan Karataş", "Victor Nelsson", "Abdülkerim Bardakçı", "Sacha Boey", "Lucas Torreira", "Sergio Oliveira",
+            "Dries Mertens", "Kerem Aktürkoğlu", "Yunus Akgün",
+            "Barış Alper Yılmaz"], logo: "gs.png"
+        },
+        {
+          name: "Fenerbahçe", players: ["Lincoln", "Ferdi Kadıoğlu", "Attila Szalai", "Luan Peres", "Willian Arao",
+            "Arda Güler", "Miguel Crespo", "Ryan Kent", "Michy Batshuayi", "Edin Dzeko"], logo: "fb.png"
+        },
+        {
+          name: "Beşiktaş", players: ["Romain Saiss", "Omar Colley", "Arthur Masuaku",
+            "Valentin Rosier", "Amir Hadziahmetovic", "Gedson Fernandes",
+            "Salih Uçan", "Rachid Ghezzal", "Cenk Tosun", "Vincent Aboubakar"], logo: "bjk.png"
+        },
+        {
+          name: "Trabzonspor", players: ["Eren Elmalı", "Marc Bartra", "Stefano Denswil", "Jens Stryger Larsen",
+            "Manolis Siopis", "Edin Visca", "Anastasios Bakasetas", "Trezeguet",
+            "Maxi Gomez", "Umut Bozok"], logo: "ts.png"
+        },
+        // Add more teams with their respective player arrays
+      ];
+
+      // Generate random scores between 0 and 5 for two teams
+      var team1Score = Math.floor(Math.random() * 6);
+      var team2Score = Math.floor(Math.random() * 6);
+
+      // Generate random team names without repetition
+      var randomIndex1 = Math.floor(Math.random() * teamNames.length);
+      var team1 = teamNames[randomIndex1];
+      teamNames.splice(randomIndex1, 1); // Remove selected team
+
+      var randomIndex2 = Math.floor(Math.random() * teamNames.length);
+      var team2 = teamNames[randomIndex2];
+
+      // Assign players to each team
+      var team1Name = team1.name;
+      var team1Players = team1.players;
+      var team1Logo = team1.logo;
+
+      var team2Name = team2.name;
+      var team2Players = team2.players;
+      var team2Logo = team2.logo;
+
+      // Display the scores and team names on the page
+      var scoreContainer = document.getElementById("scoreContainer");
+      scoreContainer.innerHTML = team1Name + " " + team1Score + " - " + team2Score + " " + team2Name;
+
+      var teamsContainer = document.getElementById("teamsContainer");
+      teamsContainer.innerHTML = "";
+
+      var team1LogoElement = document.createElement("img");
+      team1LogoElement.setAttribute("src", team1Logo);
+      team1LogoElement.setAttribute("alt", team1Name + " Logo");
+      team1LogoElement.classList.add("teamLogo");
+      teamsContainer.appendChild(team1LogoElement);
+
+      var team2LogoElement = document.createElement("img");
+      team2LogoElement.setAttribute("src", team2Logo);
+      team2LogoElement.setAttribute("alt", team2Name + " Logo");
+      team2LogoElement.classList.add("teamLogo");
+      teamsContainer.appendChild(team2LogoElement);
+
+      // Display players who scored as many goals as the number of scores
+      var playersContainer = document.getElementById("playersContainer");
+      playersContainer.innerHTML = "";
+
+      if (team1Score > 0) {
+        playersContainer.innerHTML += "<h3><strong>" + team1Name + " gol atanlar:<strong></h3>";
+        for (var i = 0; i < team1Score; i++) {
+          var randomPlayerIndex = Math.floor(Math.random() * team1Players.length);
+          var scorer = team1Players[randomPlayerIndex];
+          playersContainer.innerHTML += "<p>" + scorer + "</p>";
+        }
+      }
+
+      if (team2Score > 0) {
+        playersContainer.innerHTML += "<h3><strong>" + team2Name + " gol atanlar:<strong></h3>";
+        for (var j = 0; j < team2Score; j++) {
+          var randomPlayerIndex = Math.floor(Math.random() * team2Players.length);
+          var scorer = team2Players[randomPlayerIndex];
+          playersContainer.innerHTML += "<p>" + scorer + "</p>";
+        }
+      }
+    }
+  </script>
+</head>
+
+<body style="background-color: black;">
+  <div id="scoreContainer"></div>
+  <div id="teamsContainer"></div>
+  <div id="playersContainer"></div>
+  <button id="startButton" onclick="simulateMatch()">BAŞLAT</button>
+</body>
+
+</html>
