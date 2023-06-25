@@ -4,6 +4,14 @@
 <head>
   <title>OZY SIMULATOR</title>
   <style>
+    #ozyContainer {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 24px;
+      color: white;
+    }
+
     #scoreContainer {
       text-align: center;
       margin-top: 100px;
@@ -12,10 +20,10 @@
     }
 
     #teamsContainer {
-      display: flex;
       align-items: center;
       justify-content: space-between;
       margin-top: 20px;
+      margin-left: 915px;
       font-size: 16px;
     }
 
@@ -39,31 +47,87 @@
       margin: 20px auto;
     }
 
+    #randomButton {
+      display: block;
+      margin: 20px auto;
+    }
+
     h3 {
-      color: blue;
+      color: green;
+    }
+
+    #team1Dropdown {
+      display: block;
+      margin: 20px auto;
+    }
+
+    #team2Dropdown {
+      display: block;
+      margin: 20px auto;
     }
   </style>
   <script>
-    function simulateMatch() {
+    function randomMatch() {
       var teamNames = [
         {
-          name: "Galatasaray", players: ["Kazımcan Karataş", "Victor Nelsson", "Abdülkerim Bardakçı", "Sacha Boey", "Lucas Torreira", "Sergio Oliveira",
-            "Dries Mertens", "Kerem Aktürkoğlu", "Yunus Akgün",
-            "Barış Alper Yılmaz"], logo: "logos/gs.png"
+          name: "Galatasaray", players: ["Kazımcan Karataş", "Victor Nelsson", "Abdülkerim Bardakçı", "Sacha Boey", "Lucas Torreira", "Sergio Oliveira", "Dries Mertens", "Kerem Aktürkoğlu", "Yunus Akgün", "Barış Alper Yılmaz"], logo: "gs.png"
         },
         {
-          name: "Fenerbahçe", players: ["Lincoln", "Ferdi Kadıoğlu", "Attila Szalai", "Luan Peres", "Willian Arao",
-            "Arda Güler", "Miguel Crespo", "Ryan Kent", "Michy Batshuayi", "Edin Dzeko"], logo: "logos/fb.png"
+          name: "Fenerbahçe", players: ["Lincoln", "Ferdi Kadıoğlu", "Attila Szalai", "Luan Peres", "Willian Arao", "Arda Güler", "Miguel Crespo", "Ryan Kent", "Michy Batshuayi", "Edin Dzeko"], logo: "fb.png"
         },
         {
-          name: "Beşiktaş", players: ["Romain Saiss", "Omar Colley", "Arthur Masuaku",
-            "Valentin Rosier", "Amir Hadziahmetovic", "Gedson Fernandes",
-            "Salih Uçan", "Rachid Ghezzal", "Cenk Tosun", "Vincent Aboubakar"], logo: "logos/bjk.png"
+          name: "Beşiktaş", players: ["Romain Saiss", "Omar Colley", "Arthur Masuaku", "Valentin Rosier", "Amir Hadziahmetovic", "Gedson Fernandes", "Salih Uçan", "Rachid Ghezzal", "Cenk Tosun", "Vincent Aboubakar"], logo: "bjk.png"
         },
         {
-          name: "Trabzonspor", players: ["Eren Elmalı", "Marc Bartra", "Stefano Denswil", "Jens Stryger Larsen",
-            "Manolis Siopis", "Edin Visca", "Anastasios Bakasetas", "Trezeguet",
-            "Maxi Gomez", "Umut Bozok"], logo: "logos/ts.png"
+          name: "Trabzonspor", players: ["Eren Elmalı", "Marc Bartra", "Stefano Denswil", "Jens Stryger Larsen", "Manolis Siopis", "Edin Visca", "Anastasios Bakasetas", "Trezeguet", "Maxi Gomez", "Umut Bozok"], logo: "ts.png"
+        },
+        {
+          name: "Adana Demirspor", players: ["Simon Deli", "Semih Güler", "Kevin Rodrigues", "Jonas Svensson", "Badou Ndiaye", "Emre Akbaba", "Younes Belhanda", "Yusuf Sarı", "Babajide David Akintola", "Fredrik Gulbrandsen"], logo: "adanademir.png"
+        },
+        {
+          name: "Başakşehir", players: ["Leo Duarte", "Ahmed Touba", "Lucas Lima", "Edgar Ie", "Berkay Özcan", "Eden Karzev", "Danijel Aleksic", "Mounir Chouiar", "Joao Figueiredo", "Serdar Gürler"], logo: "basaksehir.png"
+        },
+        {
+          name: "Karagümrük", players: ["Rayyan Baniya", "Ibrahim Dresevic", "Levent Mercan", "Otabek Shukurov", "Magomed Ozdoev", "Andrea Bertolacci", "Lawrence Nicholas", "Adnan Uğur", "Adem Ljajic", "Sofiane Feghouli"], logo: "karagumruk.png"
+        },
+        {
+          name: "Konyaspor", players: ["Adil Demirbağ", "Francisco Calvo", "Guilherme", "Ahmet Oğuz", "Niko Rak", "Bruno Paz", "Soner Dikmen", "Robert Muric", "Konrad Michalak", "Muhammet Demir"], logo: "konya.png"
+        },
+        {
+          name: "Kayserispor", players: ["Arif Kocaman", "Dimitrios Kolovetsios", "Gökhan Sazdağı", "Anthony Uzodimma", "Olivier Kemen", "Ali Karimi", "Mame Thiam", "Carlos Mane", "Ramazan Civelek", "Miguel Cardoso"], logo: "kayseri.png"
+        },
+        {
+          name: "Kasımpaşa", players: ["Yasin Özcan", "Daniel Graovac", "Gökhan Gül", "Aytaç Kara", "Mickael Tirpan", "Haris Hajradinovic", "Berat Kalkan", "Mamadou Fall", "Stephane Bahoken", "Erdem Çetinkaya"], logo: "kasimpasa.png"
+        },
+        {
+          name: "Ankaragücü", players: ["Nihad Mujakic", "Abdullah Çelik", "Enock Kwateng", "Lamine Diack", "Andrej Djokanovic", "Pedrinho", "Ali Kaan Güneren", "Giorgi Beridze", "Anastasios Chatzigiovanis", "Ali Sowe"], logo: "ankaragucu.png"
+        },
+        {
+          name: "İstanbulspor", players: ["Mehmet Yeşil", "Okan Erdoğan", "Michael Ologo", "Florian Loshaj", "Muammer Sarıkaya", "Eduart Rroca", "Valon Ethemi", "Jetmir Topalli", "Emir Kaan Gültekin", "İbrahim Yılmaz"], logo: "istanbulspor.png"
+        },
+        {
+          name: "Antalyaspor", players: ["Ömer Toprak", "Veysel Sarı", "Sherel Floranus", "Bünyamin Balcı", "Fernando", "Ufuk Akyol", "Erdal Rakip", "Shoya Nakajima", "Sam Larsson", "Haji Wright"], logo: "antalya.png"
+        },
+        {
+          name: "Sivasspor", players: ["Samba Camara", "Uğur Çiftçi", "Murat Paluli", "Kader Keita", "Charilaos Charisis", "Max Gradel", "Erdoğan Yeşilyurt", "Ahmed Musa", "Clinton N'Jie", "Karol Angielski"], logo: "sivas.png"
+        },
+        {
+          name: "Alanyaspor", players: ["Fatih Aksoy", "Furkan Bayır", "Jure Balkovec", "Yusuf Özdemir", "Umut Güneş", "Efkan Bekiroğlu", "Arnaud Lusamba", "Tayfur Bingöl", "Oğuz Aydın", "Zinedine Ferhat"], logo: "alanya.png"
+        },
+        {
+          name: "Gaziantep FK", players: ["Papy Djilobodji", "Ertuğrul Ersoy", "Arda Kızıldağ", "Marko Jevtovic", "Furkan Soyalp", "Alexandru Maxim", "Luka Stankovski", "Angelo Sagal", "Lazar Markovic", "Mustafa Eskihellaç"], logo: "gaziantep.png"
+        },
+        {
+          name: "Hatayspor", players: ["Burak Öksüz", "Burak Bekaroğlu", "Sam Adekugbe", "Kamil Ahmet Çörekçi", "Armin Hodzic", "Mehdi Boudjemaa", "Fisayo Dele-Bashiru", "Saba Lobzhanidze", "Bertuğ Yıldırım", "Carlos Strandberg"], logo: "hatay.png"
+        },
+        {
+          name: "Samsunspor", players: ["Yunus Emre Çift", "Lubomir Satka", "Soner Gönül", "Zeki Yavru", "Youssef Ait Bennasser", "Celil Yüksel", "Kadeem Harris", "Ahmet Sagat", "Douglas Tanque", "Gaetan Laura"], logo: "samsun.png"
+        },
+        {
+          name: "Rizespor", players: ["Emirhan Topçu", "Anıl Yaşar", "Alberk Koç", "Halil İbrahim Pehlivan", "Enriko Papa", "Farouk Miya", "Mithat Pala", "Benhur Keser", "Ibrahim Olawoyin", "John Mary"], logo: "rize.png"
+        },
+        {
+          name: "Pendikspor", players: ["Berkay Sülüngöz", "Murat Akça", "Erhan Kara", "Kerem Kaya", "Bekir Karadeniz", "Aias Aosman", "Gökcan Kaya", "Hasan Kılıç", "Enes Keskin", "Görkem Bitin"], logo: "pendik.png"
         },
         // Add more teams with their respective player arrays
       ];
@@ -112,32 +176,247 @@
       var playersContainer = document.getElementById("playersContainer");
       playersContainer.innerHTML = "";
 
+      var allScorers = [];
+
       if (team1Score > 0) {
-        playersContainer.innerHTML += "<h3><strong>" + team1Name + " gol atanlar:<strong></h3>";
         for (var i = 0; i < team1Score; i++) {
           var randomPlayerIndex = Math.floor(Math.random() * team1Players.length);
           var scorer = team1Players[randomPlayerIndex];
-          playersContainer.innerHTML += "<p>" + scorer + "</p>";
+          var minute = Math.floor(Math.random() * 90) + 1; // Generate a random minute between 1 and 90
+          allScorers.push({scorer: scorer, minute: minute, isHomeTeam: true});
         }
       }
 
       if (team2Score > 0) {
-        playersContainer.innerHTML += "<h3><strong>" + team2Name + " gol atanlar:<strong></h3>";
         for (var j = 0; j < team2Score; j++) {
           var randomPlayerIndex = Math.floor(Math.random() * team2Players.length);
           var scorer = team2Players[randomPlayerIndex];
-          playersContainer.innerHTML += "<p>" + scorer + "</p>";
+          var minute = Math.floor(Math.random() * 90) + 1; // Generate a random minute between 1 and 90
+          allScorers.push({scorer: scorer, minute: minute, isHomeTeam: false});
         }
+      }
+
+      // Sort the scorers by minute
+      allScorers.sort(function (a, b) {
+        return a.minute - b.minute;
+      });
+
+      // Display the sorted scorers
+      for (var k = 0; k < allScorers.length; k++) {
+        var scorer = allScorers[k].scorer;
+        var minute = allScorers[k].minute;
+        var isHomeTeam = allScorers[k].isHomeTeam;
+        var color = isHomeTeam ? "red" : "blue";
+        playersContainer.innerHTML += "<p style='color: " + color + ";'>" + scorer + " (" + minute + "')</p>";
+      }
+    }
+    function simulateMatch() {
+      var teamNames = [
+        {
+          name: "Galatasaray", players: ["Kazımcan Karataş", "Victor Nelsson", "Abdülkerim Bardakçı", "Sacha Boey", "Lucas Torreira", "Sergio Oliveira", "Dries Mertens", "Kerem Aktürkoğlu", "Yunus Akgün", "Barış Alper Yılmaz"], logo: "gs.png"
+        },
+        {
+          name: "Fenerbahçe", players: ["Lincoln", "Ferdi Kadıoğlu", "Attila Szalai", "Luan Peres", "Willian Arao", "Arda Güler", "Miguel Crespo", "Ryan Kent", "Michy Batshuayi", "Edin Dzeko"], logo: "fb.png"
+        },
+        {
+          name: "Beşiktaş", players: ["Romain Saiss", "Omar Colley", "Arthur Masuaku", "Valentin Rosier", "Amir Hadziahmetovic", "Gedson Fernandes", "Salih Uçan", "Rachid Ghezzal", "Cenk Tosun", "Vincent Aboubakar"], logo: "bjk.png"
+        },
+        {
+          name: "Trabzonspor", players: ["Eren Elmalı", "Marc Bartra", "Stefano Denswil", "Jens Stryger Larsen", "Manolis Siopis", "Edin Visca", "Anastasios Bakasetas", "Trezeguet", "Maxi Gomez", "Umut Bozok"], logo: "ts.png"
+        },
+        {
+          name: "Adana Demirspor", players: ["Simon Deli", "Semih Güler", "Kevin Rodrigues", "Jonas Svensson", "Badou Ndiaye", "Emre Akbaba", "Younes Belhanda", "Yusuf Sarı", "Babajide David Akintola", "Fredrik Gulbrandsen"], logo: "adanademir.png"
+        },
+        {
+          name: "Başakşehir", players: ["Leo Duarte", "Ahmed Touba", "Lucas Lima", "Edgar Ie", "Berkay Özcan", "Eden Karzev", "Danijel Aleksic", "Mounir Chouiar", "Joao Figueiredo", "Serdar Gürler"], logo: "basaksehir.png"
+        },
+        {
+          name: "Karagümrük", players: ["Rayyan Baniya", "Ibrahim Dresevic", "Levent Mercan", "Otabek Shukurov", "Magomed Ozdoev", "Andrea Bertolacci", "Lawrence Nicholas", "Adnan Uğur", "Adem Ljajic", "Sofiane Feghouli"], logo: "karagumruk.png"
+        },
+        {
+          name: "Konyaspor", players: ["Adil Demirbağ", "Francisco Calvo", "Guilherme", "Ahmet Oğuz", "Niko Rak", "Bruno Paz", "Soner Dikmen", "Robert Muric", "Konrad Michalak", "Muhammet Demir"], logo: "konya.png"
+        },
+        {
+          name: "Kayserispor", players: ["Arif Kocaman", "Dimitrios Kolovetsios", "Gökhan Sazdağı", "Anthony Uzodimma", "Olivier Kemen", "Ali Karimi", "Mame Thiam", "Carlos Mane", "Ramazan Civelek", "Miguel Cardoso"], logo: "kayseri.png"
+        },
+        {
+          name: "Kasımpaşa", players: ["Yasin Özcan", "Daniel Graovac", "Gökhan Gül", "Aytaç Kara", "Mickael Tirpan", "Haris Hajradinovic", "Berat Kalkan", "Mamadou Fall", "Stephane Bahoken", "Erdem Çetinkaya"], logo: "kasimpasa.png"
+        },
+        {
+          name: "Ankaragücü", players: ["Nihad Mujakic", "Abdullah Çelik", "Enock Kwateng", "Lamine Diack", "Andrej Djokanovic", "Pedrinho", "Ali Kaan Güneren", "Giorgi Beridze", "Anastasios Chatzigiovanis", "Ali Sowe"], logo: "ankaragucu.png"
+        },
+        {
+          name: "İstanbulspor", players: ["Mehmet Yeşil", "Okan Erdoğan", "Michael Ologo", "Florian Loshaj", "Muammer Sarıkaya", "Eduart Rroca", "Valon Ethemi", "Jetmir Topalli", "Emir Kaan Gültekin", "İbrahim Yılmaz"], logo: "istanbulspor.png"
+        },
+        {
+          name: "Antalyaspor", players: ["Ömer Toprak", "Veysel Sarı", "Sherel Floranus", "Bünyamin Balcı", "Fernando", "Ufuk Akyol", "Erdal Rakip", "Shoya Nakajima", "Sam Larsson", "Haji Wright"], logo: "antalya.png"
+        },
+        {
+          name: "Sivasspor", players: ["Samba Camara", "Uğur Çiftçi", "Murat Paluli", "Kader Keita", "Charilaos Charisis", "Max Gradel", "Erdoğan Yeşilyurt", "Ahmed Musa", "Clinton N'Jie", "Karol Angielski"], logo: "sivas.png"
+        },
+        {
+          name: "Alanyaspor", players: ["Fatih Aksoy", "Furkan Bayır", "Jure Balkovec", "Yusuf Özdemir", "Umut Güneş", "Efkan Bekiroğlu", "Arnaud Lusamba", "Tayfur Bingöl", "Oğuz Aydın", "Zinedine Ferhat"], logo: "alanya.png"
+        },
+        {
+          name: "Gaziantep FK", players: ["Papy Djilobodji", "Ertuğrul Ersoy", "Arda Kızıldağ", "Marko Jevtovic", "Furkan Soyalp", "Alexandru Maxim", "Luka Stankovski", "Angelo Sagal", "Lazar Markovic", "Mustafa Eskihellaç"], logo: "gaziantep.png"
+        },
+        {
+          name: "Hatayspor", players: ["Burak Öksüz", "Burak Bekaroğlu", "Sam Adekugbe", "Kamil Ahmet Çörekçi", "Armin Hodzic", "Mehdi Boudjemaa", "Fisayo Dele-Bashiru", "Saba Lobzhanidze", "Bertuğ Yıldırım", "Carlos Strandberg"], logo: "hatay.png"
+        },
+        {
+          name: "Samsunspor", players: ["Yunus Emre Çift", "Lubomir Satka", "Soner Gönül", "Zeki Yavru", "Youssef Ait Bennasser", "Celil Yüksel", "Kadeem Harris", "Ahmet Sagat", "Douglas Tanque", "Gaetan Laura"], logo: "samsun.png"
+        },
+        {
+          name: "Rizespor", players: ["Emirhan Topçu", "Anıl Yaşar", "Alberk Koç", "Halil İbrahim Pehlivan", "Enriko Papa", "Farouk Miya", "Mithat Pala", "Benhur Keser", "Ibrahim Olawoyin", "John Mary"], logo: "rize.png"
+        },
+        {
+          name: "Pendikspor", players: ["Berkay Sülüngöz", "Murat Akça", "Erhan Kara", "Kerem Kaya", "Bekir Karadeniz", "Aias Aosman", "Gökcan Kaya", "Hasan Kılıç", "Enes Keskin", "Görkem Bitin"], logo: "pendik.png"
+        },
+        // Add more teams with their respective player arrays
+      ];
+
+      var team1Dropdown = document.getElementById("team1Dropdown");
+      var team2Dropdown = document.getElementById("team2Dropdown");
+
+      var team1Index = team1Dropdown.selectedIndex;
+      var team2Index = team2Dropdown.selectedIndex;
+
+      if (team1Index === team2Index) {
+        alert("İki takım aynı olamaz.");
+        return;
+      }
+
+      var team1 = teamNames[team1Index];
+      var team2 = teamNames[team2Index];
+
+      // Generate random scores between 0 and 5 for two teams
+      var team1Score = Math.floor(Math.random() * 6);
+      var team2Score = Math.floor(Math.random() * 6);
+
+      // Assign players to each team
+      var team1Name = team1.name;
+      var team1Players = team1.players;
+      var team1Logo = team1.logo;
+
+      var team2Name = team2.name;
+      var team2Players = team2.players;
+      var team2Logo = team2.logo;
+
+      // Display the scores and team names on the page
+      var scoreContainer = document.getElementById("scoreContainer");
+      scoreContainer.innerHTML = team1Name + " " + team1Score + " - " + team2Score + " " + team2Name;
+
+      var teamsContainer = document.getElementById("teamsContainer");
+      teamsContainer.innerHTML = "";
+
+      var team1LogoElement = document.createElement("img");
+      team1LogoElement.setAttribute("src", team1Logo);
+      team1LogoElement.setAttribute("alt", team1Name + " Logo");
+      team1LogoElement.classList.add("teamLogo");
+      teamsContainer.appendChild(team1LogoElement);
+
+      var team2LogoElement = document.createElement("img");
+      team2LogoElement.setAttribute("src", team2Logo);
+      team2LogoElement.setAttribute("alt", team2Name + " Logo");
+      team2LogoElement.classList.add("teamLogo");
+      teamsContainer.appendChild(team2LogoElement);
+
+      // Display players who scored as many goals as the number of scores
+      var playersContainer = document.getElementById("playersContainer");
+      playersContainer.innerHTML = "";
+
+      var allScorers = [];
+
+      if (team1Score > 0) {
+        for (var i = 0; i < team1Score; i++) {
+          var randomPlayerIndex = Math.floor(Math.random() * team1Players.length);
+          var scorer = team1Players[randomPlayerIndex];
+          var minute = Math.floor(Math.random() * 90) + 1; // Generate a random minute between 1 and 90
+          allScorers.push({scorer: scorer, minute: minute, isHomeTeam: true});
+        }
+      }
+
+      if (team2Score > 0) {
+        for (var j = 0; j < team2Score; j++) {
+          var randomPlayerIndex = Math.floor(Math.random() * team2Players.length);
+          var scorer = team2Players[randomPlayerIndex];
+          var minute = Math.floor(Math.random() * 90) + 1; // Generate a random minute between 1 and 90
+          allScorers.push({scorer: scorer, minute: minute, isHomeTeam: false});
+        }
+      }
+
+      // Sort the scorers by minute
+      allScorers.sort(function (a, b) {
+        return a.minute - b.minute;
+      });
+
+      // Display the sorted scorers
+      for (var k = 0; k < allScorers.length; k++) {
+        var scorer = allScorers[k].scorer;
+        var minute = allScorers[k].minute;
+        var isHomeTeam = allScorers[k].isHomeTeam;
+        var color = isHomeTeam ? "red" : "blue";
+        playersContainer.innerHTML += "<p style='color: " + color + ";'>" + scorer + " (" + minute + "')</p>";
       }
     }
   </script>
 </head>
 
 <body style="background-color: black;">
+  <div>
+    <select id="team1Dropdown">
+      <option value="0">Galatasaray</option>
+      <option value="1">Fenerbahçe</option>
+      <option value="2">Beşiktaş</option>
+      <option value="3">Trabzonspor</option>
+      <option value="4">Adana Demirspor</option>
+      <option value="5">Başakşehir</option>
+      <option value="6">Karagümrük</option>
+      <option value="7">Konyaspor</option>
+      <option value="8">Kayserispor</option>
+      <option value="9">Kasımpaşa</option>
+      <option value="10">Ankaragücü</option>
+      <option value="11">İstanbulspor</option>
+      <option value="12">Antalyaspor</option>
+      <option value="13">Sivasspor</option>
+      <option value="14">Alanyaspor</option>
+      <option value="15">Gaziantep FK</option>
+      <option value="16">Hatayspor</option>
+      <option value="17">Samsunspor</option>
+      <option value="18">Rizespor</option>
+      <option value="19">Pendikspor</option>
+      <!-- Add more teams as needed -->
+    </select>
+    <select id="team2Dropdown">
+      <option value="0">Galatasaray</option>
+      <option value="1">Fenerbahçe</option>
+      <option value="2">Beşiktaş</option>
+      <option value="3">Trabzonspor</option>
+      <option value="4">Adana Demirspor</option>
+      <option value="5">Başakşehir</option>
+      <option value="6">Karagümrük</option>
+      <option value="7">Konyaspor</option>
+      <option value="8">Kayserispor</option>
+      <option value="9">Kasımpaşa</option>
+      <option value="10">Ankaragücü</option>
+      <option value="11">İstanbulspor</option>
+      <option value="12">Antalyaspor</option>
+      <option value="13">Sivasspor</option>
+      <option value="14">Alanyaspor</option>
+      <option value="15">Gaziantep FK</option>
+      <option value="16">Hatayspor</option>
+      <option value="17">Samsunspor</option>
+      <option value="18">Rizespor</option>
+      <option value="19">Pendikspor</option>
+      <!-- Add more teams as needed -->
+    </select>
+  </div>
   <div id="scoreContainer"></div>
   <div id="teamsContainer"></div>
   <div id="playersContainer"></div>
+  <div id="ozyContainer">by OZZY</div>
   <button id="startButton" onclick="simulateMatch()">BAŞLAT</button>
+  <button id="randomButton" onclick="randomMatch()">RASTGELE</button>
 </body>
 
 </html>
