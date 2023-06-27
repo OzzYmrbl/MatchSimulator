@@ -65,6 +65,17 @@
       display: block;
       margin: 20px auto;
     }
+
+    table {
+      border-collapse: collapse;
+      color: white;
+    }
+
+    th,
+    td {
+      padding: 5px;
+      border: 1px solid black;
+    }
   </style>
   <script>
     function randomMatch() {
@@ -183,7 +194,13 @@
           var randomPlayerIndex = Math.floor(Math.random() * team1Players.length);
           var scorer = team1Players[randomPlayerIndex];
           var minute = Math.floor(Math.random() * 90) + 1; // Generate a random minute between 1 and 90
-          allScorers.push({scorer: scorer, minute: minute, isHomeTeam: true});
+          var assisterIndex = Math.floor(Math.random() * team1Players.length);
+          var assister = team1Players[assisterIndex];
+          while (assister === scorer) {
+            assisterIndex = Math.floor(Math.random() * team1Players.length);
+            assister = team1Players[assisterIndex];
+          }
+          allScorers.push({scorer: scorer, minute: minute, assister: assister, isHomeTeam: true});
         }
       }
 
@@ -192,7 +209,13 @@
           var randomPlayerIndex = Math.floor(Math.random() * team2Players.length);
           var scorer = team2Players[randomPlayerIndex];
           var minute = Math.floor(Math.random() * 90) + 1; // Generate a random minute between 1 and 90
-          allScorers.push({scorer: scorer, minute: minute, isHomeTeam: false});
+          var assisterIndex = Math.floor(Math.random() * team2Players.length);
+          var assister = team2Players[assisterIndex];
+          while (assister === scorer) {
+            assisterIndex = Math.floor(Math.random() * team2Players.length);
+            assister = team2Players[assisterIndex];
+          }
+          allScorers.push({scorer: scorer, minute: minute, assister: assister, isHomeTeam: false});
         }
       }
 
@@ -205,9 +228,10 @@
       for (var k = 0; k < allScorers.length; k++) {
         var scorer = allScorers[k].scorer;
         var minute = allScorers[k].minute;
+        var assister = allScorers[k].assister;
         var isHomeTeam = allScorers[k].isHomeTeam;
         var color = isHomeTeam ? "red" : "blue";
-        playersContainer.innerHTML += "<p style='color: " + color + ";'>" + scorer + " (" + minute + "')</p>";
+        playersContainer.innerHTML += "<p style='color: " + color + ";'> <b>" + scorer + "</b> (" + minute + "') - <i>" + assister + "</i> </p>";
       }
     }
     function simulateMatch() {
@@ -332,7 +356,13 @@
           var randomPlayerIndex = Math.floor(Math.random() * team1Players.length);
           var scorer = team1Players[randomPlayerIndex];
           var minute = Math.floor(Math.random() * 90) + 1; // Generate a random minute between 1 and 90
-          allScorers.push({scorer: scorer, minute: minute, isHomeTeam: true});
+          var assisterIndex = Math.floor(Math.random() * team1Players.length);
+          var assister = team1Players[assisterIndex];
+          while (assister === scorer) {
+            assisterIndex = Math.floor(Math.random() * team1Players.length);
+            assister = team1Players[assisterIndex];
+          }
+          allScorers.push({scorer: scorer, minute: minute, assister: assister, isHomeTeam: true});
         }
       }
 
@@ -341,7 +371,13 @@
           var randomPlayerIndex = Math.floor(Math.random() * team2Players.length);
           var scorer = team2Players[randomPlayerIndex];
           var minute = Math.floor(Math.random() * 90) + 1; // Generate a random minute between 1 and 90
-          allScorers.push({scorer: scorer, minute: minute, isHomeTeam: false});
+          var assisterIndex = Math.floor(Math.random() * team2Players.length);
+          var assister = team2Players[assisterIndex];
+          while (assister === scorer) {
+            assisterIndex = Math.floor(Math.random() * team2Players.length);
+            assister = team2Players[assisterIndex];
+          }
+          allScorers.push({scorer: scorer, minute: minute, assister: assister, isHomeTeam: false});
         }
       }
 
@@ -354,9 +390,10 @@
       for (var k = 0; k < allScorers.length; k++) {
         var scorer = allScorers[k].scorer;
         var minute = allScorers[k].minute;
+        var assister = allScorers[k].assister;
         var isHomeTeam = allScorers[k].isHomeTeam;
         var color = isHomeTeam ? "red" : "blue";
-        playersContainer.innerHTML += "<p style='color: " + color + ";'>" + scorer + " (" + minute + "')</p>";
+        playersContainer.innerHTML += "<p style='color: " + color + ";'> <b>" + scorer + "</b> (" + minute + "') - <i>" + assister + "</i> </p>";
       }
     }
   </script>
@@ -399,7 +436,7 @@
       <option value="8">Kayserispor</option>
       <option value="9">Kasımpaşa</option>
       <option value="10">Ankaragücü</option>
-      <option value="11">İstanbulspor</option>
+      <option value="11">İstanbulsspor</option>
       <option value="12">Antalyaspor</option>
       <option value="13">Sivasspor</option>
       <option value="14">Alanyaspor</option>
