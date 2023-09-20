@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lig Oluştur</title>
+
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        th,
+        td {
+            border: 1px solid white;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: gray;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        #baslatButton {
+            display: block;
+            margin: 0 auto;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+        }
+
+        tr:nth-child(-n+2) {
+            background-color: darkblue;
+            color: white;
+        }
+
+        tr:nth-child(3) {
+            background-color: darkorange;
+            color: white;
+        }
+
+        tr:nth-child(4) {
+            background-color: darkgreen;
+            color: white;
+        }
+
+        tr:nth-last-child(-n+4) {
+            background-color: red;
+            color: white;
+        }
+
+        tr:nth-child(n+5):nth-child(-n+16) {
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="baslatButton">BAŞLAT</button>
+    <table id="puanTablosu" border="1">
+        <thead>
+            <tr>
+                <th>Takım</th>
+                <th>O</th>
+                <th>G</th>
+                <th>B</th>
+                <th>M</th>
+                <th>AG</th>
+                <th>YG</th>
+                <th>AV</th>
+                <th>P</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Puan tablosu burada oluşturulacak -->
+        </tbody>
+    </table>
+
+    <script>
+        // Takımları temsil eden bir dizi
+        var takimlar = [
+            { ad: "Galatasaray" },
+            { ad: "Fenerbahçe" },
+            { ad: "Beşiktaş" },
+            { ad: "Trabzonspor" },
+            { ad: "Adana Demirspor" },
+            { ad: "Başakşehir" },
+            { ad: "Karagümrük" },
+            { ad: "Konyaspor" },
+            { ad: "Kayserispor" },
+            { ad: "Kasımpaşa" },
+            { ad: "Ankaragücü" },
+            { ad: "İstanbulspor" },
+            { ad: "Antalyaspor" },
+            { ad: "Sivasspor" },
+            { ad: "Alanyaspor" },
+            { ad: "Gaziantep" },
+            { ad: "Hatayspor" },
+            { ad: "Rizespor" },
+            { ad: "Samsunspor" },
+            { ad: "Pendikspor" }
+        ];
+
+        document.getElementById("baslatButton").addEventListener("click", function () {
+            // 20 takımı ve 38 maçı içeren lig simülasyonunu başlatmak için bu alanda JavaScript kodlarınızı ekleyin.
+            baslatLig();
+        });
+
+        function baslatLig() {
+            // Puan tablosu için bir dizi
+            var puanlar = [];
+
+            // Tüm takımlar arasında rastgele maç sonuçları üretin ve puanları hesaplayın
+            for (var i = 0; i < takimlar.length; i++) {
+                var takim = takimlar[i];
+                var oynananMac = 0;
+                var galibiyet = 0;
+                var beraberlik = 0;
+                var maglubiyet = 0;
+                var atilanGol = 0;
+                var yenilenGol = 0;
+                var averaj = 0;
+
+                // Diğer takımlara karşı oynanan maçlar
+                for (var j = 0; j < takimlar.length; j++) {
+                    if (i !== j) {
+                        var digerTakim = takimlar[j];
+
+                        for (var k = 0; k < 2; k++) {
+                            var skor = simulateMacSonucu(); // Rastgele bir maç sonucu üretme fonksiyonu gerekecek
+
+                            oynananMac++;
+                            atilanGol += skor.evGol;
+                            yenilenGol += skor.deplasmanGol;
+                            averaj
+
+                            if (skor.evGol > skor.deplasmanGol) {
+                                galibiyet++;
+                            } else if (skor.evGol < skor.deplasmanGol) {
+                                maglubiyet++;
+                            } else {
+                                beraberlik++;
+                            }
+                        }
+                    }
+                }
+
+                // Puan hesaplama
+                var puan = galibiyet * 3 + beraberlik;
+
+                // Puan tablosuna ekle
+                puanlar.push({
+                    takim: takim.ad,
+                    oynananMac: oynananMac,
+                    galibiyet: galibiyet,
+                    beraberlik: beraberlik,
+                    maglubiyet: maglubiyet,
+                    atilanGol: atilanGol,
+                    yenilenGol: yenilenGol,
+                    puan: puan
+                });
+            }
+
+            // Puan tablosunu puanlara göre sırala
+            puanlar.sort(function (a, b) {
+                return b.puan - a.puan;
+            });
+
+            updatePuanTablosu(puanlar);
+        }
+
+        function simulateMacSonucu() {
+            // Rastgele bir maç sonucu üretmek için bu işlevi kullanabilirsiniz
+            var evGol = Math.floor(Math.random() * 5); // 0-4 arası rastgele gol
+            var deplasmanGol = Math.floor(Math.random() * 5); // 0-4 arası rastgele gol
+
+            return {
+                evGol: evGol,
+                deplasmanGol: deplasmanGol
+            };
+        }
+
+        function updatePuanTablosu(puanlar) {
+            // Puan tablosunu güncellemek için bu işlevi kullanabilirsiniz.
+            var puanTablosu = document.getElementById("puanTablosu");
+            var tabloIcerik = "";
+
+            for (var i = 0; i < puanlar.length; i++) {
+                var averaj = puanlar[i].atilanGol - puanlar[i].yenilenGol;
+
+                tabloIcerik += "<tr>";
+                tabloIcerik += "<td>" + puanlar[i].takim + "</td>";
+                tabloIcerik += "<td>" + puanlar[i].oynananMac + "</td>";
+                tabloIcerik += "<td>" + puanlar[i].galibiyet + "</td>";
+                tabloIcerik += "<td>" + puanlar[i].beraberlik + "</td>";
+                tabloIcerik += "<td>" + puanlar[i].maglubiyet + "</td>";
+                tabloIcerik += "<td>" + puanlar[i].atilanGol + "</td>";
+                tabloIcerik += "<td>" + puanlar[i].yenilenGol + "</td>";
+                tabloIcerik += "<td>" + averaj + "</td>";
+                tabloIcerik += "<td>" + puanlar[i].puan + "</td>";
+                tabloIcerik += "</tr>";
+            }
+
+            puanTablosu.querySelector("tbody").innerHTML = tabloIcerik;
+        }
+    </script>
+</body>
+
+</html>
