@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Ozy Simulator - Futbol Maçı Simülasyonu" />
+  <meta name="keywords"
+    content="Ozy, Simulator, Futbol, Maç, Simülasyon, Galatasaray, Fenerbahçe, Beşiktaş, Trabzonspor" />
+  <meta name="author" content="Ozycanbro" />
+  <link rel="icon" href="ball.ico" />
+  <title>Ozy Simulator</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 2rem;
+      box-sizing: border-box;
+    }
+
+    .team-selection {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    label {
+      font-weight: 700;
+      font-size: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      color: #f9d423;
+      user-select: none;
+    }
+
+    select {
+      margin-top: 0.4rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      outline-offset: 2px;
+      outline-color: #f9d423;
+      background-color: #2f2c2c;
+      color: white;
+      user-select: none;
+      transition: background-color 0.2s ease;
+    }
+
+    select:hover,
+    select:focus {
+      background-color: #463f3f;
+    }
+
+    #warning {
+      margin: 0.5rem 0 1rem 0;
+      color: #ff4444;
+      font-weight: 600;
+      min-height: 1.3rem;
+      filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.8));
+    }
+
+    #time {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    }
+
+    #startBtn {
+      background: #ff6f61;
+      border: none;
+      padding: .9rem 3rem;
+      font-size: 1.4rem;
+      font-weight: 700;
+      border-radius: 30px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(255, 111, 97, 0.6);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+      margin-bottom: 1rem;
+    }
+
+    #startBtn:hover:not(:disabled) {
+      background: #ff4a3a;
+      box-shadow: 0 10px 25px rgba(255, 74, 58, 0.8);
+    }
+
+    #startBtn:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    #randomBtn {
+      background: #ffd700;
+      border: none;
+      padding: .9rem 3rem;
+      font-size: 1.4rem;
+      font-weight: 700;
+      border-radius: 30px;
+      color: black;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(255, 111, 97, 0.6);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+      margin-bottom: 1rem;
+    }
+
+    #randomBtn:hover:not(:disabled) {
+      background: #ffd700;
+      box-shadow: 0 10px 25px rgba(255, 215, 0, 0.8);
+    }
+
+    #randomBtn:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .teams {
+      display: flex;
+      justify-content: center;
+      gap: 4rem;
+      margin: 1rem 0 2rem 0;
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .team {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 2rem 2rem 2rem 2rem;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      flex: 1 1 45%;
+      transition: background-color 0.3s ease;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .team-image {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+      margin-bottom: 0.6rem;
+      filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.7));
+    }
+
+    .team.winner {
+      background: #f9d423;
+      color: #3e1300;
+      box-shadow: 0 8px 30px #f9d423;
+      font-weight: 700;
+    }
+
+    .team h2 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .score {
+      font-size: 4rem;
+      font-weight: 700;
+      margin: 0.2rem 0 0 0;
+    }
+
+    .stats {
+      margin-top: 0.8rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: left;
+      line-height: 1.4;
+      color: #f9d423;
+      width: 100%;
+      max-width: 250px;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 0.8rem 1rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      white-space: pre-line;
+      min-height: 130px;
+    }
+
+    #result {
+      margin-top: 2.5rem;
+      font-size: 1.4rem;
+      font-weight: 600;
+      min-height: 6rem;
+      text-align: center;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+      white-space: pre-wrap;
+      max-width: 900px;
+    }
+
+    #finalGoalsContainer {
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      max-width: 700px;
+      gap: 4rem;
+      color: #f9d423;
+      font-weight: 600;
+      font-size: 1.2rem;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 0.8rem 1rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      white-space: pre-line;
+      min-height: 4rem;
+    }
+
+    #goalList1,
+    #goalList2 {
+      flex: 1;
+      padding: 0 0.5rem;
+      font-size: 20px;
+    }
+
+    .assist {
+      font-style: italic;
+      font-size: 0.85em;
+      color: #ddd;
+      margin-left: 1.2em;
+      display: block;
+      margin-top: -0.3em;
+      margin-bottom: 0.2em;
+    }
+
+    footer {
+      margin-top: auto;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="team-selection">
+    <label for="teamSelect1">
+      Takım 1 Seç:
+      <select id="teamSelect1" aria-label="Takım 1 Seçimi"></select>
+    </label>
+    <label for="teamSelect2">
+      Takım 2 Seç:
+      <select id="teamSelect2" aria-label="Takım 2 Seçimi"></select>
+    </label>
+  </div>
+  <div id="warning"></div>
+  <button id="startBtn">Başlat</button>
+  <button id="randomBtn" style="margin-left: 1rem;">Rastgele</button>
+  <div id="time">Dakika: 0'</div>
+
+  <div class="teams">
+    <div id="team1" class="team">
+      <img id="logo1" class="team-image" src="" alt="Takım 1 logosu" />
+      <h2>Galatasaray</h2>
+      <div class="score" id="score1">0</div>
+      <pre class="stats" id="stats1"></pre>
+      <div id="goalList1Container">
+        <pre id="goalList1" style="min-height: 60px;"></pre>
+      </div>
+    </div>
+    <div id="team2" class="team">
+      <img id="logo2" class="team-image" src="" alt="Takım 2 logosu" />
+      <h2>Fenerbahçe</h2>
+      <div class="score" id="score2">0</div>
+      <pre class="stats" id="stats2"></pre>
+      <div id="goalList2Container">
+        <pre id="goalList2" style="min-height: 60px;"></pre>
+      </div>
+    </div>
+  </div>
+  <div id="result" aria-live="polite" hidden></div>
+
+  <script>
+    const teamData = {
+      Galatasaray: {
+        players: [
+          { name: 'Abdülkerim Bardakcı', goalRate: 4, assistRate: 3 },
+          { name: 'Davinson Sanchez', goalRate: 5, assistRate: 2 },
+          { name: 'Eren Elmalı', goalRate: 4, assistRate: 5 },
+          { name: 'Roland Sallai', goalRate: 5, assistRate: 6 },
+          { name: 'Lucas Torreira', goalRate: 5, assistRate: 3 },
+          { name: 'Gabriel Sara', goalRate: 5, assistRate: 10 },
+          { name: 'Mario Lemina', goalRate: 3, assistRate: 4 },
+          { name: 'Barış Alper Yılmaz', goalRate: 8, assistRate: 6 },
+          { name: 'Yunus Akgün', goalRate: 8, assistRate: 9 },
+          { name: 'Victor Osimhen', goalRate: 11, assistRate: 2 }
+        ]
+      },
+      Fenerbahçe: {
+        players: [
+          { name: 'Milan Skriniar', goalRate: 4, assistRate: 2 },
+          { name: 'Çağlar Söyüncü', goalRate: 3, assistRate: 2 },
+          { name: 'Mert Müldür', goalRate: 5, assistRate: 3 },
+          { name: 'Sofyan Amrabat', goalRate: 2, assistRate: 4 },
+          { name: 'Fred', goalRate: 4, assistRate: 5 },
+          { name: 'Sebastian Szymanski', goalRate: 4, assistRate: 6 },
+          { name: 'Filip Kostic', goalRate: 3, assistRate: 10 },
+          { name: 'Oğuz Aydın', goalRate: 7, assistRate: 7 },
+          { name: 'Youssef En-Nesyri', goalRate: 9, assistRate: 5 },
+          { name: 'Edin Dzeko', goalRate: 10, assistRate: 5 }
+        ]
+      },
+      Beşiktaş: {
+        players: [
+          { name: 'Felix Uduokhai', goalRate: 2, assistRate: 2 },
+          { name: 'Gabriel Paulista', goalRate: 2, assistRate: 4 },
+          { name: 'Arthur Masuaku', goalRate: 4, assistRate: 8 },
+          { name: 'Jonas Svensson', goalRate: 3, assistRate: 5 },
+          { name: 'Gedson Fernandes', goalRate: 7, assistRate: 8 },
+          { name: 'Joao Mario', goalRate: 5, assistRate: 6 },
+          { name: 'Rafa Silva', goalRate: 9, assistRate: 9 },
+          { name: 'Milot Rashica', goalRate: 7, assistRate: 6 },
+          { name: 'Alex Oxlade-Chamberlain', goalRate: 6, assistRate: 6 },
+          { name: 'Ciro Immobile', goalRate: 10, assistRate: 2 }
+        ]
+      },
+      Trabzonspor: {
+        players: [
+          { name: 'Arseniy Batagov', goalRate: 3, assistRate: 3 },
+          { name: 'Stefan Savic', goalRate: 2, assistRate: 2 },
+          { name: 'Mustafa Eskihellaç', goalRate: 3, assistRate: 6 },
+          { name: 'Pedro Malheiro', goalRate: 7, assistRate: 5 },
+          { name: 'Batista Mendy', goalRate: 3, assistRate: 5 },
+          { name: 'John Lundstram', goalRate: 4, assistRate: 4 },
+          { name: 'Muhammed Cham', goalRate: 8, assistRate: 7 },
+          { name: 'Anthony Nwakaeme', goalRate: 7, assistRate: 8 },
+          { name: 'Oleksandr Zubkov', goalRate: 8, assistRate: 6 },
+          { name: 'Simon Banza', goalRate: 10, assistRate: 3 }
+        ]
+      }
+    };
+
+    const startBtn = document.getElementById('startBtn');
+    const randomBtn = document.getElementById('randomBtn');
+    const score1El = document.getElementById('score1');
+    const score2El = document.getElementById('score2');
+    const team1El = document.getElementById('team1');
+    const team2El = document.getElementById('team2');
+    const logo1El = document.getElementById('logo1');
+    const logo2El = document.getElementById('logo2');
+    const resultEl = document.getElementById('result');
+    const timeEl = document.getElementById('time');
+    const warningEl = document.getElementById('warning');
+    const stats1El = document.getElementById('stats1');
+    const stats2El = document.getElementById('stats2');
+    const goalList1El = document.getElementById('goalList1');
+    const goalList2El = document.getElementById('goalList2');
+
+    const teamSelect1 = document.getElementById('teamSelect1');
+    const teamSelect2 = document.getElementById('teamSelect2');
+
+    // Team logos URLs - update paths as needed
+    const teamLogos = {
+      Galatasaray: 'https://upload.wikimedia.org/wikipedia/commons/0/0b/Galatasaray_AS_logo_2025.svg',
+      Fenerbahçe: 'https://upload.wikimedia.org/wikipedia/en/3/39/Fenerbahçe.svg',
+      Beşiktaş: 'https://upload.wikimedia.org/wikipedia/commons/d/da/BesiktasJK-Logo.svg',
+      Trabzonspor: 'https://upload.wikimedia.org/wikipedia/en/d/de/Trabzonspor_Amblem.svg',
+    };
+
+    function validateTeams() {
+      if (teamSelect1.value === teamSelect2.value) {
+        warningEl.textContent = 'Lütfen farklı iki takım seçiniz!';
+        startBtn.disabled = true;
+        return false;
+      } else {
+        warningEl.textContent = '';
+        startBtn.disabled = false;
+        return true;
+      }
+    }
+
+    function updateTeamLogos() {
+      const t1 = teamSelect1.value;
+      const t2 = teamSelect2.value;
+      logo1El.src = teamLogos[t1] || '';
+      logo1El.alt = t1 + ' logosu';
+      logo2El.src = teamLogos[t2] || '';
+      logo2El.alt = t2 + ' logosu';
+    }
+
+    teamSelect1.addEventListener('change', () => {
+      validateTeams();
+      updateTeamNames();
+      updateTeamLogos();
+      clearGoalLists();
+    });
+    teamSelect2.addEventListener('change', () => {
+      validateTeams();
+      updateTeamNames();
+      updateTeamLogos();
+      clearGoalLists();
+    });
+
+    function selectRandomTeams() {
+      const teamNames = Object.keys(teamData);
+
+      let team1 = teamNames[getRandomInt(0, teamNames.length - 1)];
+      let team2;
+      do {
+        team2 = teamNames[getRandomInt(0, teamNames.length - 1)];
+      } while (team1 === team2);
+
+      teamSelect1.value = team1;
+      teamSelect2.value = team2;
+
+      validateTeams();
+      updateTeamNames();
+      updateTeamLogos();
+      clearGoalLists();
+    }
+
+    // Butona tıklanınca çalışacak
+    randomBtn.addEventListener('click', selectRandomTeams);
+
+    function updateTeamNames() {
+      team1El.querySelector('h2').textContent = teamSelect1.value;
+      team2El.querySelector('h2').textContent = teamSelect2.value;
+      stats1El.textContent = '';
+      stats2El.textContent = '';
+    }
+
+    function clearGoalLists() {
+      goalList1El.innerHTML = '';
+      goalList2El.innerHTML = '';
+    }
+
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // Probability weighted random choice from players based on goal/assist rates
+    function weightedRandomPlayer(players, type) {
+      // type: 'goal' or 'assist'
+      const totalWeight = players.reduce((sum, p) => sum + (type === 'goal' ? p.goalRate : p.assistRate), 0);
+      let random = Math.random() * totalWeight;
+      for (const p of players) {
+        random -= (type === 'goal' ? p.goalRate : p.assistRate);
+        if (random <= 0) return p.name;
+      }
+      return players[players.length - 1].name; // fallback
+    }
+
+    function generateMatchStats(goals1, goals2) {
+      const possession1 = getRandomInt(30, 70);
+      const possession2 = 100 - possession1;
+
+      let shots1 = getRandomInt(Math.max(5, goals1), 20);
+      let shots2 = getRandomInt(Math.max(5, goals2), 20);
+
+      let shotsOnTarget1 = getRandomInt(goals1, shots1);
+      let shotsOnTarget2 = getRandomInt(goals2, shots2);
+
+      const fouls1 = Math.floor(Math.random() * 15) + 5; // Between 5 and 20 fouls
+      const fouls2 = Math.floor(Math.random() * 15) + 5;
+
+      const corners1 = Math.floor(Math.random() * 10);
+      const corners2 = Math.floor(Math.random() * 10);
+
+      return {
+        possession1,
+        possession2,
+        shots1,
+        shots2,
+        shotsOnTarget1,
+        shotsOnTarget2,
+        fouls1,
+        fouls2,
+        corners1,
+        corners2
+      };
+    }
+
+    function formatStats(statObj) {
+      return `Topla Oynama: ${statObj.possession}%
+      Toplam Şut: ${statObj.shots}
+      İsabetli Şut: ${statObj.shotsOnTarget}
+      Faul: ${statObj.fouls}
+      Korner: ${statObj.corners}`;
+    }
+
+    startBtn.addEventListener('click', () => {
+      if (!validateTeams()) return;
+
+      startBtn.disabled = true;
+      randomBtn.disabled = true;
+      teamSelect1.disabled = true;
+      teamSelect2.disabled = true;
+      startBtn.textContent = 'Simülasyon...';
+
+      score1El.textContent = '0';
+      score2El.textContent = '0';
+      team1El.classList.remove('winner');
+      team2El.classList.remove('winner');
+      resultEl.textContent = '';
+      timeEl.textContent = "Dakika: 0'";
+      stats1El.textContent = '';
+      stats2El.textContent = '';
+      clearGoalLists();
+
+      updateTeamNames();
+      updateTeamLogos();
+
+      const team1Players = teamDataGetter(teamSelect1.value);
+      const team2Players = teamDataGetter(teamSelect2.value);
+
+      let currentMinute = 0;
+      let score1 = 0;
+      let score2 = 0;
+      const goals1 = [];
+      const goals2 = [];
+
+      const intervalMs = 100;
+
+      function teamDataGetter(teamName) {
+        return teamData[teamName] ? teamData[teamName].players : [];
+      }
+
+      const simulationInterval = setInterval(() => {
+        currentMinute++;
+        timeEl.textContent = `Dakika: ${currentMinute}'`;
+
+        const goalChanceTeam1 = Math.random();
+        const goalChanceTeam2 = Math.random();
+
+        if (goalChanceTeam1 < 0.03) {
+          score1++;
+          const scorer = weightedRandomPlayer(team1Players, 'goal');
+          let assist = null;
+          if (Math.random() < 0.5) {
+            // Filter assist options excluding scorer
+            const assistCandidates = team1Players.filter(p => p.name !== scorer);
+            assist = assistCandidates.length > 0 ? weightedRandomPlayer(assistCandidates, 'assist') : null;
+          }
+          goals1.push({ minute: currentMinute, scorer, assist });
+          score1El.textContent = score1;
+        }
+        if (goalChanceTeam2 < 0.03) {
+          score2++;
+          const scorer = weightedRandomPlayer(team2Players, 'goal');
+          let assist = null;
+          if (Math.random() < 0.5) {
+            const assistCandidates = team2Players.filter(p => p.name !== scorer);
+            assist = assistCandidates.length > 0 ? weightedRandomPlayer(assistCandidates, 'assist') : null;
+          }
+          goals2.push({ minute: currentMinute, scorer, assist });
+          score2El.textContent = score2;
+        }
+
+        resultEl.textContent = `Maç devam ediyor... (${score1} - ${score2})`;
+
+        if (currentMinute >= 90) {
+          clearInterval(simulationInterval);
+          team1El.classList.remove('winner');
+          team2El.classList.remove('winner');
+          resultEl.textContent = '';
+
+          const stats = generateMatchStats(score1, score2);
+
+          stats1El.textContent = formatStats({
+            possession: stats.possession1,
+            shots: stats.shots1,
+            shotsOnTarget: stats.shotsOnTarget1,
+            fouls: stats.fouls1,
+            corners: stats.corners1
+          });
+
+          stats2El.textContent = formatStats({
+            possession: stats.possession2,
+            shots: stats.shots2,
+            shotsOnTarget: stats.shotsOnTarget2,
+            fouls: stats.fouls2,
+            corners: stats.corners2
+          });
+
+          // Sort goals by minute
+          goals1.sort((a, b) => a.minute - b.minute);
+          goals2.sort((a, b) => a.minute - b.minute);
+
+          function renderGoalList(goals, container) {
+            container.innerHTML = ''; // Clear container
+            if (goals.length === 0) {
+              container.textContent = 'Gol yok';
+              return;
+            }
+            goals.forEach(goal => {
+              const scorerElem = document.createElement('div');
+              scorerElem.textContent = `${goal.minute}' - ${goal.scorer}`;
+              container.appendChild(scorerElem);
+              if (goal.assist) {
+                const assistElem = document.createElement('div');
+                assistElem.className = 'assist';
+                assistElem.textContent = `Asist: ${goal.assist}`;
+                container.appendChild(assistElem);
+              }
+            });
+          }
+
+          renderGoalList(goals1, goalList1El);
+          renderGoalList(goals2, goalList2El);
+
+          startBtn.disabled = false;
+          randomBtn.disabled = false;
+          teamSelect1.disabled = false;
+          teamSelect2.disabled = false;
+          startBtn.textContent = 'Başlat';
+        }
+      }, intervalMs);
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const teams = Object.keys(teamData);
+      teams.forEach(team => {
+        const option1 = document.createElement('option');
+        option1.value = team;
+        option1.textContent = team;
+
+        const option2 = document.createElement('option');
+        option2.value = team;
+        option2.textContent = team;
+
+        teamSelect1.appendChild(option1);
+        teamSelect2.appendChild(option2);
+      });
+
+      // Varsayılan seçimleri ayarla
+      teamSelect1.value = teams[0];
+      teamSelect2.value = teams[1];
+
+      // Initialize UI
+      validateTeams();
+      updateTeamNames();
+      updateTeamLogos();
+      clearGoalLists();
+    });
+
+  </script>
+
+  <footer>
+    <p>© Ozy Simülasyon 2025. Tüm hakları saklıdır.</p>
+  </footer>
+</body>
+
+</html>
